@@ -137,6 +137,10 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
 
     }
 
+    private E findMinimalChild() {
+        return (E) heap[0];
+    }
+
 
     private Object findParentNode(int currentIndex) {
         int parentIndex = findParentIndex(currentIndex);
