@@ -4,12 +4,14 @@ import custompriorityqueue.api.CustomPriorityQueue;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomPriorityQueue<E> {
 
     private Comparator<E> comparator;
     private Object[] heap;
     private int size = 0;
+    private int cursor = 0;
 
 
     public CustomPriorityQueueImpl(Comparator<E> comparator) {
@@ -38,13 +40,14 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
 
     @Override
     public E poll() {
-        int cursor = size-1;
         E value = (E) heap[0];
         heap[0] = null;
-        Object lastElement = heap[cursor];
-        heap[0] = lastElement;
-        heap[cursor] = null;
         size = size - 1;
+        cursor = size;
+        Object lastElement = heap[cursor];
+        heap[cursor] = null;
+        cursor = 0;
+        heap[cursor] = lastElement;
         siftDown();
         return value;
     }
@@ -92,28 +95,43 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
     }
 
     private void siftDown() {
-        int cursor = 0;
+        cursor = 0;
         while (true) {
             // если курсор на последей ноде значит закончили
-            if (cursor == size -1 ) return;
+            if (cursor == size - 1) return;
 
             E parentNode = (E) heap[cursor];
             E leftChild = (E) findLeftChildNode(cursor);
             E rightChild = (E) findRightChildNode(cursor);
 
-            if (leftChild.compareTo(rightChild) < 0) {
+            if (leftChild == null) return;
+
+            if (rightChild == null) {
+                if (leftChild.compareTo(parentNode) < 0) {
+                    heap[cursor] = leftChild;
+                    cursor = findLeftChildIndex(cursor);
+                    heap[cursor] = parentNode;
+                    return;
+                }
+                return;
+            } else if (leftChild.compareTo(rightChild) < 0) {
                 if (leftChild.compareTo(parentNode) < 0) {
                     heap[cursor] = leftChild;
                     cursor = findLeftChildIndex(cursor);
                     heap[cursor] = parentNode;
                 } else return;
-
             } else if (rightChild.compareTo(leftChild) < 0) {
                 if (rightChild.compareTo(parentNode) < 0) {
                     heap[cursor] = rightChild;
                     cursor = findRightChildIndex(cursor);
                     heap[cursor] = parentNode;
                 }
+            } else if (leftChild.compareTo(rightChild) == 0) {
+                if (leftChild.compareTo(parentNode) < 0) {
+                    heap[cursor] = leftChild;
+                    cursor = findLeftChildIndex(cursor);
+                    heap[cursor] = parentNode;
+                } else return;
             } else return;
         }
 
@@ -151,8 +169,16 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
         return (2 * currentIndex) + 2;
     }
 
+    private int compare(E element1, E element2) {
+        if (Objects.nonNull(comparator)) return comparator.compare(element1, element2);
+        return element1.compareTo(element2);
+    }
+
+
     @Override
     public String toString() {
         return Arrays.toString(heap);
     }
+
+
 }

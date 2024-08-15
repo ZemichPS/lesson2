@@ -1,6 +1,6 @@
 package custompriorityqueue.api;
 
-public interface CustomPriorityQueue<E> {
+public interface CustomPriorityQueue<E>{
     void add(E e);
 
     E peek();

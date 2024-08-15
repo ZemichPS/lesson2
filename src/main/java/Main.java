@@ -24,10 +24,27 @@ public class Main {
         numbers.add(17);
         numbers.add(21);
         numbers.add(4);
+        numbers.add(6);
+        numbers.add(12);
         numbers.add(3);
+        numbers.add(3);
+        numbers.add(15);
+        numbers.add(20);
+        numbers.add(15);
+        numbers.add(48);
+        numbers.add(55);
+        numbers.add(61);
+        numbers.add(67);
+        numbers.add(88);
+        numbers.add(96);
+        numbers.add(1654);
+        numbers.add(6464);
+        numbers.add(6445);
+        numbers.add(694);
 
         System.out.println(numbers);
         Integer lowPriorityElement = numbers.poll();
+        System.out.println(numbers);
 
 
 
