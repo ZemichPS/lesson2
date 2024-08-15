@@ -1,86 +1,46 @@
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import custompriorityqueue.CustomPriorityQueueImpl;
 import custompriorityqueue.api.CustomPriorityQueue;
 import lombok.*;
+import model.User;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        CustomPriorityQueue<Integer> numbers = new CustomPriorityQueueImpl<>();
 
-        numbers.add(1);
-        numbers.add(5);
-        numbers.add(10);
-        numbers.add(7);
-        numbers.add(17);
-        numbers.add(21);
-        numbers.add(4);
-        numbers.add(6);
-        numbers.add(12);
-        numbers.add(3);
-        numbers.add(3);
-        numbers.add(15);
-        numbers.add(20);
-        numbers.add(15);
-        numbers.add(48);
-        numbers.add(55);
-        numbers.add(61);
-        numbers.add(67);
-        numbers.add(88);
-        numbers.add(96);
-        numbers.add(1654);
-        numbers.add(6464);
-        numbers.add(6445);
-        numbers.add(694);
+        List<User> users = findUsers();
 
-        System.out.println(numbers);
-        Integer lowPriorityElement = numbers.poll();
-        System.out.println(numbers);
+        Comparator<User> userByIdComparator = (o1, o2) -> {
+            return Long.compare(o1.getId(), o2.getId());
+        };
 
-
-
+        CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>(userByIdComparator);
+        users.forEach(priorityUsersQueue::add);
+        System.out.println(priorityUsersQueue);
     }
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Setter
-    private static class User implements Comparable<User> {
-        private long id;
-        private String firsName;
-        private String LastName;
-        private LocalDateTime birthDay;
 
-        @Override
-        public int compareTo(User user) {
-            return birthDay.compareTo(user.getBirthDay());
-        }
-
-        public long getId() {
-            return id;
-        }
-
-        public String getFirsName() {
-            return firsName;
-        }
-
-        public String getLastName() {
-            return LastName;
-        }
-
-        public LocalDateTime getBirthDay() {
-            return birthDay;
-        }
+    private static List<User> findUsers() throws IOException {
+        Path path = Paths.get("src/main/resources/initialData.json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper.readValue(path.toFile(), new TypeReference<List<User>>() {
+        });
     }
-
 }
+
+
 
 

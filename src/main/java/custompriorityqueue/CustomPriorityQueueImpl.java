@@ -73,7 +73,6 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
     }
 
     private void siftUp() {
-        // ???
         int cursor = size - 1;
 
         while (true) {
@@ -85,7 +84,7 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
             E parentNode = (E) findParentNode(cursor);
             E newNode = (E) heap[cursor];
 
-            if (newNode.compareTo(parentNode) < 0) {
+            if (compare(newNode, parentNode) < 0) {
                 // меняем местами
                 heap[cursor] = parentNode;
                 heap[parentIndex] = newNode;
@@ -96,49 +95,46 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
 
     private void siftDown() {
         cursor = 0;
-        while (true) {
-            // если курсор на последей ноде значит закончили
-            if (cursor == size - 1) return;
 
-            E parentNode = (E) heap[cursor];
+        while (!(cursor == size - 1)) {
+
+            E parent = (E) heap[cursor];
             E leftChild = (E) findLeftChildNode(cursor);
             E rightChild = (E) findRightChildNode(cursor);
 
             if (leftChild == null) return;
 
             if (rightChild == null) {
-                if (leftChild.compareTo(parentNode) < 0) {
+                if (compare(leftChild, parent) < 0) {
                     heap[cursor] = leftChild;
                     cursor = findLeftChildIndex(cursor);
-                    heap[cursor] = parentNode;
+                    heap[cursor] = parent;
                     return;
                 }
                 return;
-            } else if (leftChild.compareTo(rightChild) < 0) {
-                if (leftChild.compareTo(parentNode) < 0) {
+
+            } else if (compare(leftChild, rightChild) < 0) {
+                if (compare(leftChild, parent) < 0) {
                     heap[cursor] = leftChild;
                     cursor = findLeftChildIndex(cursor);
-                    heap[cursor] = parentNode;
+                    heap[cursor] = parent;
                 } else return;
-            } else if (rightChild.compareTo(leftChild) < 0) {
-                if (rightChild.compareTo(parentNode) < 0) {
+
+            } else if (compare(rightChild, leftChild) < 0) {
+                if (compare(rightChild, parent) < 0) {
                     heap[cursor] = rightChild;
                     cursor = findRightChildIndex(cursor);
-                    heap[cursor] = parentNode;
+                    heap[cursor] = parent;
                 }
-            } else if (leftChild.compareTo(rightChild) == 0) {
-                if (leftChild.compareTo(parentNode) < 0) {
+            } else if (compare(leftChild, rightChild) == 0) {
+                if (compare(leftChild, parent) < 0) {
                     heap[cursor] = leftChild;
                     cursor = findLeftChildIndex(cursor);
-                    heap[cursor] = parentNode;
+                    heap[cursor] = parent;
                 } else return;
             } else return;
         }
 
-    }
-
-    private void incrementSize() {
-        size++;
     }
 
 
