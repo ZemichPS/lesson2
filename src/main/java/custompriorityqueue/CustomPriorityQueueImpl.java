@@ -123,31 +123,31 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
         return findRightChildIndex(cursor);
     }
 
-    private Object findParentNode(int currentIndex) {
-        int parentIndex = findParentIndex(currentIndex);
+    private Object findParentNode(int childIndex) {
+        int parentIndex = findParentIndex(childIndex);
         return heap[parentIndex];
     }
 
-    private Object findLeftChildNode(int currentIndex) {
-        int leftChildIndex = findLeftChildIndex(currentIndex);
+    private Object findLeftChildNode(int parentIndex) {
+        int leftChildIndex = findLeftChildIndex(parentIndex);
         return heap[leftChildIndex];
     }
 
-    private Object findRightChildNode(int currentIndex) {
-        int rightChildIndex = findRightChildIndex(currentIndex);
+    private Object findRightChildNode(int parentIndex) {
+        int rightChildIndex = findRightChildIndex(parentIndex);
         return heap[rightChildIndex];
     }
 
-    private int findParentIndex(int currentIndex) {
-        return (currentIndex - 1) / 2;
+    private int findParentIndex(int childIndex) {
+        return (childIndex - 1) / 2;
     }
 
-    private int findLeftChildIndex(int currentIndex) {
-        return (2 * currentIndex) + 1;
+    private int findLeftChildIndex(int parentIndex) {
+        return (2 * parentIndex) + 1;
     }
 
-    private int findRightChildIndex(int currentIndex) {
-        return (2 * currentIndex) + 2;
+    private int findRightChildIndex(int parentIndex) {
+        return (2 * parentIndex) + 2;
     }
 
     private int compare(E element1, E element2) {

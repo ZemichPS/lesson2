@@ -26,6 +26,8 @@ public class Main {
         User user = null;
         int queueSize = priorityUsersQueue.getSize();
 
+        // ВЫВОДИМ СПИСОК ПОЛЬЗОВАТЕЛЕЙ ОТ МАЛА ДО ВЕЛИКА
+
         for (int i = 0; i < queueSize; i++) {
             user = priorityUsersQueue.poll();
             System.out.println(user);
