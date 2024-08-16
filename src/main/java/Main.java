@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -18,8 +19,8 @@ public class Main {
 
         Comparator<User> userByIdComparator = Comparator.comparingLong(User::getId);
 
-        CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>(userByIdComparator);
-        //CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>();
+        //CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>(userByIdComparator.reversed());
+        CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>();
         users.forEach(priorityUsersQueue::add);
 
         User user = null;

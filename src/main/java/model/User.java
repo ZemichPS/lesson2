@@ -56,7 +56,7 @@ public class User implements Comparable<User> {
 
     @Override
     public int compareTo(User user) {
-        return birthDay.compareTo(user.birthDay);
+        return user.getBirthDay().compareTo(birthDay);
 
     }
 
