@@ -57,7 +57,7 @@ public class CustomPriorityQueueImplTest {
     }
 
     @Test
-    void testPeekWithComparator(){
+    void testPeek_WithComparator_gitUserWithLowestId(){
         User user2 = new User(2L, "Grace", "Bell", LocalDateTime.of(1985, Month.AUGUST, 18, 0, 1 ));
         User user3 = new User(3L, "Henry", "Ward", LocalDateTime.of(1997, Month.DECEMBER, 12, 7, 35 ));
         User user4 = new User(4L, "Ivy", "Cox", LocalDateTime.of(2012, Month.APRIL, 15, 1, 4 ));
