@@ -3,17 +3,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import custompriorityqueue.CustomPriorityQueueImpl;
 import custompriorityqueue.api.CustomPriorityQueue;
-import lombok.*;
 import model.User;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,15 +16,20 @@ public class Main {
 
         List<User> users = findUsers();
 
-        Comparator<User> userByIdComparator = (o1, o2) -> {
-            return Long.compare(o1.getId(), o2.getId());
-        };
+        Comparator<User> userByIdComparator = Comparator.comparingLong(User::getId);
 
         CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>(userByIdComparator);
+        //CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>();
         users.forEach(priorityUsersQueue::add);
-        System.out.println(priorityUsersQueue);
-    }
 
+        User user = null;
+        int queueSize = priorityUsersQueue.getSize();
+
+        for (int i = 0; i < queueSize; i++) {
+            user = priorityUsersQueue.poll();
+            System.out.println(user);
+        }
+    }
 
     private static List<User> findUsers() throws IOException {
         Path path = Paths.get("src/main/resources/initialData.json");
@@ -40,6 +39,7 @@ public class Main {
         });
     }
 }
+
 
 
 

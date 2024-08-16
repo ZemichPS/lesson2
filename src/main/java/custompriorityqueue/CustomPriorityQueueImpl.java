@@ -17,7 +17,6 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
     public CustomPriorityQueueImpl(Comparator<E> comparator) {
         this.comparator = comparator;
         heap = new Object[8];
-
     }
 
     public CustomPriorityQueueImpl(Comparator<E> comparator, int initialCapacity) {
@@ -40,6 +39,8 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
 
     @Override
     public E poll() {
+        if (size == 0) return null;
+
         E value = (E) heap[0];
         heap[0] = null;
         size = size - 1;
@@ -69,23 +70,17 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
         Object[] broadenHeap = new Object[newCapacity];
         System.arraycopy(heap, 0, broadenHeap, 0, heap.length);
         heap = broadenHeap;
-
     }
 
     private void siftUp() {
         int cursor = size - 1;
 
-        while (true) {
-            //проверить не является ли новый элемент корнем дерева
-            if (cursor == 0) return;
-
+        while (cursor != 0) {
             int parentIndex = findParentIndex(cursor);
-
             E parentNode = (E) findParentNode(cursor);
             E newNode = (E) heap[cursor];
 
             if (compare(newNode, parentNode) < 0) {
-                // меняем местами
                 heap[cursor] = parentNode;
                 heap[parentIndex] = newNode;
                 cursor = parentIndex;
@@ -98,49 +93,35 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
 
         while (!(cursor == size - 1)) {
 
+            if (findLeftChildIndex(cursor) > heap.length) return;
+            if (findLeftChildNode(cursor) == null) return;
+
             E parent = (E) heap[cursor];
-            E leftChild = (E) findLeftChildNode(cursor);
-            E rightChild = (E) findRightChildNode(cursor);
+            int minimalChildIndex = findMinimalChildIndex();
+            E minimalChild = (E) heap[minimalChildIndex];
 
-            if (leftChild == null) return;
-
-            if (rightChild == null) {
-                if (compare(leftChild, parent) < 0) {
-                    heap[cursor] = leftChild;
-                    cursor = findLeftChildIndex(cursor);
-                    heap[cursor] = parent;
-                    return;
-                }
-                return;
-
-            } else if (compare(leftChild, rightChild) < 0) {
-                if (compare(leftChild, parent) < 0) {
-                    heap[cursor] = leftChild;
-                    cursor = findLeftChildIndex(cursor);
-                    heap[cursor] = parent;
-                } else return;
-
-            } else if (compare(rightChild, leftChild) < 0) {
-                if (compare(rightChild, parent) < 0) {
-                    heap[cursor] = rightChild;
-                    cursor = findRightChildIndex(cursor);
-                    heap[cursor] = parent;
-                }
-            } else if (compare(leftChild, rightChild) == 0) {
-                if (compare(leftChild, parent) < 0) {
-                    heap[cursor] = leftChild;
-                    cursor = findLeftChildIndex(cursor);
-                    heap[cursor] = parent;
-                } else return;
+            if (compare(minimalChild, parent) < 0) {
+                heap[cursor] = minimalChild;
+                cursor = minimalChildIndex;
+                heap[cursor] = parent;
             } else return;
         }
-
     }
 
-    private E findMinimalChild() {
-        return (E) heap[0];
-    }
+    private int findMinimalChildIndex() {
+        E leftChild = (E) findLeftChildNode(cursor);
+        E rightChild = (E) findRightChildNode(cursor);
 
+        if (rightChild == null && leftChild != null) return findLeftChildIndex(cursor);
+
+        if (compare(leftChild, rightChild) == 0) {
+            return findLeftChildIndex(cursor);
+        } else if (compare(leftChild, rightChild) < 0) {
+            return findLeftChildIndex(cursor);
+        }
+
+        return findRightChildIndex(cursor);
+    }
 
     private Object findParentNode(int currentIndex) {
         int parentIndex = findParentIndex(currentIndex);

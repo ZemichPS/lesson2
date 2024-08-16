@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 public class User implements Comparable<User> {
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -22,11 +22,11 @@ public class User implements Comparable<User> {
     public User() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,6 +57,7 @@ public class User implements Comparable<User> {
     @Override
     public int compareTo(User user) {
         return birthDay.compareTo(user.birthDay);
+
     }
 
     @Override
