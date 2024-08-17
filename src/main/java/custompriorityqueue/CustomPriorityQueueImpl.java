@@ -2,11 +2,14 @@ package custompriorityqueue;
 
 import custompriorityqueue.api.CustomPriorityQueue;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
 
-public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomPriorityQueue<E> {
+public class CustomPriorityQueueImpl<E> extends TypeToken<E> implements CustomPriorityQueue<E> {
 
     private Comparator<E> comparator;
     private Object[] heap;
@@ -24,11 +27,18 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
         heap = new Object[initialCapacity];
     }
 
-    public CustomPriorityQueueImpl(int initialCapacity) {
+    public CustomPriorityQueueImpl(Class<E> clazz, int initialCapacity) {
+        if (!(Comparable.class.isAssignableFrom(clazz))) {
+            throw new IllegalArgumentException("Type %s must implement Comparable interface".formatted(clazz));
+        }
         heap = new Object[initialCapacity];
     }
 
-    public CustomPriorityQueueImpl() {
+    public CustomPriorityQueueImpl(Class<E> clazz) {
+
+        if (!(Comparable.class.isAssignableFrom(clazz))) {
+            throw new IllegalArgumentException("Type %s must implement Comparable interface".formatted(clazz));
+        }
         heap = new Object[8];
     }
 
@@ -152,9 +162,12 @@ public class CustomPriorityQueueImpl<E extends Comparable<E>> implements CustomP
 
     private int compare(E element1, E element2) {
         if (Objects.nonNull(comparator)) return comparator.compare(element1, element2);
-        return element1.compareTo(element2);
+        return ((Comparable<E>) element1).compareTo(element2);
     }
 
+    private Class<?> getGenericTypeClass() {
+        return (Class<?>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
 
     @Override
     public String toString() {

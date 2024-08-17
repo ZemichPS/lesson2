@@ -1,5 +1,6 @@
 package custompriorityqueue;
 
+import model.SimpleUser;
 import model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +10,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Comparator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomPriorityQueueImplTest {
 
@@ -19,7 +19,7 @@ public class CustomPriorityQueueImplTest {
 
     @BeforeEach
     public void setUp() {
-        customPriorityQueue = new CustomPriorityQueueImpl<>();
+        customPriorityQueue = new CustomPriorityQueueImpl<>(User.class);
 
         Comparator<User> userByIdComparator = Comparator.comparingLong(User::getId);
         customPriorityQueueWithComparator = new CustomPriorityQueueImpl<>(userByIdComparator);
@@ -107,7 +107,11 @@ public class CustomPriorityQueueImplTest {
         customPriorityQueue.add(user2);
 
         assertEquals(2, customPriorityQueue.getSize());
+    }
 
+    @Test
+    void testCreateNew_ifNotComparable_throwsException(){
+        assertThrows(IllegalArgumentException.class, ()-> new CustomPriorityQueueImpl(SimpleUser.class));
     }
 
 

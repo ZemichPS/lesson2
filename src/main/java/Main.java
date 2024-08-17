@@ -20,13 +20,11 @@ public class Main {
         Comparator<User> userByIdComparator = Comparator.comparingLong(User::getId);
 
         //CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>(userByIdComparator.reversed());
-        CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>();
+        CustomPriorityQueue<User> priorityUsersQueue = new CustomPriorityQueueImpl<>(User.class);
         users.forEach(priorityUsersQueue::add);
 
         User user = null;
         int queueSize = priorityUsersQueue.getSize();
-
-        // ВЫВОДИМ СПИСОК ПОЛЬЗОВАТЕЛЕЙ ОТ МАЛА ДО ВЕЛИКА
 
         for (int i = 0; i < queueSize; i++) {
             user = priorityUsersQueue.poll();
@@ -40,6 +38,18 @@ public class Main {
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper.readValue(path.toFile(), new TypeReference<List<User>>() {
         });
+    }
+
+    public static class SimpleUser {
+        public Integer id;
+        public String name;
+        public int age;
+
+        public SimpleUser(int id, String name, int age) {
+            this.id = id;
+            this.name = name;
+            this.age = age;
+        }
     }
 }
 
